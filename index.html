@@ -180,8 +180,9 @@
 
     <!-- Navbar -->
     <nav class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4">
-        <div class="glass-nav rounded-full px-6 py-3 flex items-center justify-between shadow-lg">
-            <div class="flex items-center gap-6">
+        <div class="glass-nav rounded-full px-6 py-3 flex items-center justify-between shadow-lg relative z-50">
+            <!-- Desktop Left Menu -->
+            <div class="hidden md:flex items-center gap-6">
                 <a href="#home" class="text-sm font-medium text-gray-300 hover:text-white transition">Home</a>
                 <a href="login.html" class="text-sm font-medium text-gray-300 hover:text-white transition">App</a>
                 <div class="relative group">
@@ -204,13 +205,96 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Logo (Center on Desktop, Left on Mobile) -->
             <div class="text-2xl font-black text-julia">JULIA</div>
-            <div class="flex items-center gap-3">
+
+            <!-- desktop Right Buttons -->
+            <div class="hidden md:flex items-center gap-3">
                 <a href="login.html" class="text-sm font-medium text-gray-300 hover:text-white transition">Login</a>
                 <a href="register.html" class="julia-btn px-5 py-2 rounded-full text-sm">Criar Assistente</a>
             </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobileMenuBtn" class="md:hidden text-gray-300 hover:text-white transition focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path class="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16"></path>
+                    <path class="close-icon hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu"
+            class="hidden md:hidden absolute top-full left-4 right-4 mt-2 glass-nav rounded-2xl p-4 flex flex-col gap-4 shadow-xl transform origin-top transition-all duration-300 ease-in-out opacity-0 scale-95">
+            <a href="#home"
+                class="mobile-link text-base font-medium text-gray-300 hover:text-white px-4 py-2 rounded-lg hover:bg-white/5 transition">Home</a>
+            <a href="#funcionalidades"
+                class="mobile-link text-base font-medium text-gray-300 hover:text-white px-4 py-2 rounded-lg hover:bg-white/5 transition">Funcionalidades</a>
+            <a href="#como-funciona"
+                class="mobile-link text-base font-medium text-gray-300 hover:text-white px-4 py-2 rounded-lg hover:bg-white/5 transition">Como
+                funciona</a>
+            <a href="pricing.html"
+                class="mobile-link text-base font-medium text-gray-300 hover:text-white px-4 py-2 rounded-lg hover:bg-white/5 transition">Planos</a>
+            <div class="h-px bg-white/10 my-1"></div>
+            <a href="login.html"
+                class="mobile-link text-center text-sm font-medium text-gray-300 hover:text-white py-2">Login</a>
+            <a href="register.html"
+                class="mobile-link text-center julia-btn px-5 py-3 rounded-xl text-sm w-full block">Criar Assistente</a>
         </div>
     </nav>
+
+    <script>
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = mobileMenuBtn.querySelector('.menu-icon');
+        const closeIcon = mobileMenuBtn.querySelector('.close-icon');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            const isHidden = mobileMenu.classList.contains('hidden');
+
+            if (isHidden) {
+                // Open menu
+                mobileMenu.classList.remove('hidden');
+                // Small delay to allow display:block to apply before opacity transition
+                requestAnimationFrame(() => {
+                    mobileMenu.classList.remove('opacity-0', 'scale-95');
+                    mobileMenu.classList.add('opacity-100', 'scale-100');
+                });
+                menuIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            } else {
+                // Close menu
+                mobileMenu.classList.remove('opacity-100', 'scale-100');
+                mobileMenu.classList.add('opacity-0', 'scale-95');
+
+                // Wait for transition to finish before hiding
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300); // match duration-300
+
+                menuIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMenu);
+
+        // Close menu when clicking a link
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target) && !mobileMenu.classList.contains('hidden')) {
+                toggleMenu();
+            }
+        });
+    </script>
 
     <!-- Hero Section -->
     <section class="gradient-bg min-h-screen flex items-center justify-center px-6 pt-24 pb-12">
@@ -220,7 +304,7 @@
                 <span>🔥</span>
                 <span class="font-medium">Bem vindo ao futuro</span>
             </div>
-            <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight leading-tight text-white">
+            <h1 class="text-4xl md:text-7xl font-black mb-6 tracking-tight leading-tight text-white">
                 Conheça Julia, a melhor<br>IA-SDR do mercado
             </h1>
             <p class="text-lg md:text-xl text-gray-400 mb-8 max-w-3xl mx-auto leading-relaxed">
