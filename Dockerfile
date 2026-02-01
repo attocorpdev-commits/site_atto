@@ -1,13 +1,16 @@
 FROM nginx:alpine
 
+# Define working directory
+WORKDIR /usr/share/nginx/html
+
 # Remove default nginx static assets
-RUN rm -rf /usr/share/nginx/html/*
+RUN rm -rf ./*
 
-# Copy static assets from current directory to container
-COPY . /usr/share/nginx/html
+# Copy all files from current directory to the container
+COPY . .
 
-# Configurar aivatech-copy.html como index.html se não existir
-RUN cp /usr/share/nginx/html/aivatech-copy.html /usr/share/nginx/html/index.html
+# Rename the main HTML file to index.html so Nginx serves it automatically
+RUN mv aivatech-copy.html index.html
 
 # Expose port 80
 EXPOSE 80
