@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Julia - SDR via Inteligencia Artificial</title>
+    content="Julia atende e qualifica seus leads no WhatsApp, liberando seu time comercial para se concentrar em
+    reuniões e fechar negócios.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        julia: '#3b82f6', // Azul Royal
+                        juliadark: '#1e40af', // Azul Escuro
+                        julialight: '#60a5fa', // Azul Claro
+                        darkbg: '#020617', // Slate 950
+                        cardbg: '#0f172a', // Slate 900
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(180deg, #020617 0%, #172554 100%);
+        }
+
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .marquee {
+            animation: marquee 30s linear infinite;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .julia-btn {
+            background: #3b82f6;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .julia-btn:hover {
+            background: #2563eb;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-btn {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: #000;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 12px 12px 12px;
+            border-style: solid;
+            border-color: transparent transparent white transparent;
+        }
+
+        .tab-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .tab-content.active {
+            opacity: 1;
+            transform: translateY(0);
+            position: relative;
+            pointer-events: all;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 0.5rem;
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            min-width: 200px;
+            z-index: 100;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-menu a:first-child {
+            border-radius: 1rem 1rem 0 0;
+        }
+
+        .dropdown-menu a:last-child {
+            border-radius: 0 0 1rem 1rem;
+        }
+
+        .dropdown-menu a:hover {
+            background: #1e293b;
+            color: #3b82f6;
+            padding-left: 1.5rem;
+        }
+    </style>
+</head>
+
+<body class="bg-darkbg text-white antialiased">
+
+    <!-- Navbar -->
+    <nav class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4">
+        <div class="glass-nav rounded-full px-6 py-3 flex items-center justify-between shadow-lg">
+            <div class="flex items-center gap-6">
+                <a href="#home" class="text-sm font-medium text-gray-300 hover:text-white transition">Home</a>
+                <a href="https://app.aivatech.co/frontend" target="_blank"
+                    class="text-sm font-medium text-gray-300 hover:text-white transition">App</a>
+                <div class="relative group">
+                    <button id="maisBtn"
+                        class="text-sm font-medium text-gray-300 hover:text-white transition flex items-center gap-1">
+                        Mais
+                        <svg class="w-4 h-4 transition-transform" id="maisIcon" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div id="maisDropdown" class="dropdown-menu">
+                        <a href="#funcionalidades">Funcionalidades</a>
+                        <a href="#como-funciona">Como funciona</a>
+                        <a href="https://aivatech.co/pricing-wpp" target="_blank">Planos</a>
+                        <a href="https://aivatech.co/sobre" target="_blank">Sobre nós</a>
+                        <a href="https://aivatech.co/contato" target="_blank">Contato</a>
+                        <a href="#faq">FAQ</a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-2xl font-black text-julia">JULIA</div>
+            <div class="flex items-center gap-3">
+                <a href="https://app.aivatech.co/frontend" target="_blank"
+                    class="text-sm font-medium text-gray-300 hover:text-white transition">Login</a>
+                <a href="https://app.aivatech.co/frontend/register" target="_blank"
+                    class="julia-btn px-5 py-2 rounded-full text-sm">Criar Assistente</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg min-h-screen flex items-center justify-center px-6 pt-24 pb-12">
+        <div class="max-w-4xl mx-auto text-center fade-in">
+            <div
+                class="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-4 py-2 rounded-full mb-6 text-sm text-white">
+                <span>🔥</span>
+                <span class="font-medium">Bem vindo ao futuro</span>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight leading-tight text-white">
+                Conheça Julia, a melhor<br>IA-SDR do mercado
+            </h1>
+            <p class="text-lg md:text-xl text-gray-400 mb-8 max-w-3xl mx-auto leading-relaxed">
+                Deixe Julia cuidar do atendimento 💬, qualificação e agendamento 🗓️, enquanto sua equipe foca no que
+                realmente importa — fechar negócios 🤝
+            </p>
+            <div class="flex items-center justify-center gap-3 mb-8">
+                <div
+                    class="flex items-center gap-2 bg-white/10 border border-white/20 px-4 py-2 rounded-lg text-sm text-white">
+                    <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                    <span class="font-medium">+55 (11) 98122-9837</span>
+                </div>
+            </div>
+            <a href="https://wa.me/5511981229837?text=Olá%20Julia!%20Gostaria%20de%20saber%20mais%20sobre%20seus%20serviços"
+                target="_blank"
+                class="inline-block julia-btn px-8 py-4 rounded-full text-lg mb-12 hover:scale-105 transition-transform shadow-lg shadow-blue-500/50">
+                Conversar com Julia
+            </a>
+            <div class="relative max-w-md mx-auto">
+                <div class="absolute inset-0 bg-blue-500 blur-3xl opacity-20 rounded-full">
+                </div>
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop"
+                    alt="AIVA Avatar"
+                    class="relative rounded-full w-64 h-64 mx-auto object-cover shadow-2xl border-4 border-white">
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="overflow-hidden py-6 bg-darkbg border-y border-white/10">
+        <div class="flex gap-12 marquee whitespace-nowrap text-gray-300">
+            <span class="flex items-center gap-2 text-sm font-semibold">✅ Atendimento 24/7</span>
+            <span class="flex items-center gap-2 text-sm font-semibold">🎯 Qualificação Inteligente</span>
+            <span class="flex items-center gap-2 text-sm font-semibold">⚡ Respostas Rápidas</span>
+            <span class="flex items-center gap-2 text-sm font-semibold">📅 Agendamento Automático</span>
+            <span class="flex items-center gap-2 text-sm font-semibold">💬 Respostas Humanizadas</span>
+            <span class="flex items-center gap-2 text-sm font-semibold">📊 Insights Valiosos</span>
+            <span class="flex items-center gap-2 text-sm font-semibold">🎭 Roteiro Adaptativo</span>
+            <span class="flex items-center gap-2 text-sm font-semibold">🔄 Follow-ups Dinâmicos</span>
+            <span class="flex items-center gap-2 text-sm font-semibold">✅ Atendimento 24/7</span>
+            <span class="flex items-center gap-2 text-sm font-semibold">🎯 Qualificação Inteligente</span>
+            <span class="flex items-center gap-2 text-sm font-semibold">⚡ Respostas Rápidas</span>
+            <span class="flex items-center gap-2 text-sm font-semibold">📅 Agendamento Automático</span>
+        </div>
+    </div>
+
+    <!-- Problem Section -->
+    <section class="py-24 px-6 bg-darkbg">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-16 fade-in text-white">Sua empresa está assim?
+            </h2>
+            <p class="text-center text-gray-400 mb-16 max-w-2xl mx-auto fade-in">
+                Enfrentando desafios para gerenciar leads 📊 e buscando uma solução eficiente para escalar vendas… então
+                Julia pode ajudar 🔥
+            </p>
+            <div class="grid md:grid-cols-2 gap-8 items-center mb-20">
+                <div class="fade-in">
+                    <div class="bg-julia rounded-3xl p-8 shadow-xl relative shadow-blue-500/20">
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-sm font-bold">
+                                    AI</div>
+                                <div class="bg-white p-3 rounded-2xl flex-1 shadow-sm text-gray-800">
+                                    <p class="text-sm">Olá! Como posso ajudar?</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 flex-row-reverse">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center text-white text-sm font-bold">
+                                    U</div>
+                                <div class="bg-black/20 text-white p-3 rounded-2xl flex-1 shadow-sm">
+                                    <p class="text-sm">Preciso de informações</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute -bottom-4 -right-4 text-6xl">🚀</div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4 fade-in">
+                    <div class="bg-cardbg p-6 rounded-2xl shadow-md card-hover border border-white/5">
+                        <div class="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h3 class="font-bold mb-2 text-white">Sua equipe está sobrecarregada</h3>
+                    </div>
+                    <div class="bg-cardbg p-6 rounded-2xl shadow-md card-hover border border-white/5">
+                        <div class="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h3 class="font-bold mb-2 text-white">Está "deixando dinheiro na mesa"</h3>
+                    </div>
+                    <div class="bg-cardbg p-6 rounded-2xl shadow-md card-hover border border-white/5">
+                        <div class="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-bold mb-2 text-white">Falta tempo para o que realmente importa</h3>
+                    </div>
+                    <div class="bg-cardbg p-6 rounded-2xl shadow-md card-hover border border-white/5">
+                        <div class="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-bold mb-2 text-white">Sua empresa não consegue escalar</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center fade-in">
+                <h3 class="text-3xl font-bold mb-4 text-white">A solução é automatizar seu atendimento com Inteligência!
+                </h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- SDR Section -->
+    <section id="como-funciona" class="py-24 px-6 bg-darkbg">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 fade-in">
+                <p class="text-julia font-semibold mb-4">Olá 👋 sou Julia</p>
+                <h2 class="text-4xl md:text-5xl font-black mb-6 text-white">Sua nova SDR via Inteligência Artificial
+                </h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Mais leads qualificados, mais agenda cheia, menos tarefas chatas. Julia não dorme, não tira férias e
+                    não dá desculpas.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="space-y-6 fade-in">
+                    <div class="bg-cardbg p-6 rounded-2xl border border-white/5 card-hover">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-full bg-julia/10 flex items-center justify-center flex-shrink-0 text-julia">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-2 text-white">Comunicação humanizada, escala ilimitada
+                                </h3>
+                                <p class="text-gray-400 text-sm">Trate um milhão de clientes como um milhão de clientes
+                                    únicos.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-cardbg p-6 rounded-2xl border border-white/5 card-hover">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-full bg-julia/10 flex items-center justify-center flex-shrink-0 text-julia">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-2 text-white">Qualificação Inteligente de Leads</h3>
+                                <p class="text-gray-400 text-sm">Classifique cada lead automaticamente e priorize os de
+                                    maior potencial.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-cardbg p-6 rounded-2xl border border-white/5 card-hover">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-full bg-julia/10 flex items-center justify-center flex-shrink-0 text-julia">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-2 text-white">Gestão Automatizada de Follow-ups</h3>
+                                <p class="text-gray-400 text-sm">Mantenha seus leads sempre aquecidos até estarem
+                                    prontos para comprar.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-cardbg p-6 rounded-2xl border border-white/5 card-hover">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-full bg-julia/10 flex items-center justify-center flex-shrink-0 text-julia">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-2 text-white">Agenda Lotada Sem Esforço</h3>
+                                <p class="text-gray-400 text-sm">Mais reuniões qualificadas, menos esforço com
+                                    agendamentos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 gap-6 fade-in">
+                    <div class="bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-3xl border border-blue-200">
+                        <div class="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-black mb-2" style="color: #2563eb;">300% de aumento</h3>
+                        <p class="text-gray-700">nas conversões</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-3xl border border-green-200">
+                        <div class="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-black mb-2" style="color: #10b981;">80% de redução</h3>
+                        <p class="text-gray-700">das tarefas manuais</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-3xl border border-purple-200">
+                        <div class="w-16 h-16 rounded-full bg-purple-500 flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                                </path>
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-black mb-2" style="color: #a855f7;">200% de aumento</h3>
+                        <p class="text-gray-700">na satisfação do cliente</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Tabs Section -->
+    <section class="py-24 px-6 bg-darkbg overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <!-- Tabs Navigation -->
+            <div class="flex justify-center mb-16 fade-in">
+                <div class="inline-flex bg-white/5 p-2 rounded-2xl gap-2 overflow-x-auto max-w-full">
+                    <button
+                        class="tab-btn active px-8 py-4 rounded-xl flex items-center gap-3 text-gray-400 font-bold whitespace-nowrap hover:text-white"
+                        data-tab="chat">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z">
+                            </path>
+                        </svg>
+                        Chat
+                    </button>
+                    <button
+                        class="tab-btn px-8 py-4 rounded-xl flex items-center gap-3 text-gray-500 font-bold whitespace-nowrap"
+                        data-tab="calendario">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        Calendário
+                    </button>
+                    <button
+                        class="tab-btn px-8 py-4 rounded-xl flex items-center gap-3 text-gray-500 font-bold whitespace-nowrap"
+                        data-tab="dashboard">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                            </path>
+                        </svg>
+                        Dashboard
+                    </button>
+                    <button
+                        class="tab-btn px-8 py-4 rounded-xl flex items-center gap-3 text-gray-500 font-bold whitespace-nowrap"
+                        data-tab="kanban">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2">
+                            </path>
+                        </svg>
+                        Kanban
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Contents -->
+            <div
+                class="relative min-h-[600px] fade-in transform transition-all duration-700 bg-cardbg rounded-3xl p-4 shadow-2xl border border-white/10">
+                <!-- Chat View (Active) -->
+                <div id="chat-content" class="tab-content active h-full flex items-center justify-center">
+                    <img src="chat_ui_dark.png" alt="Julia Chat Interface"
+                        class="rounded-xl shadow-sm w-full h-auto object-cover border border-white/10">
+                </div>
+
+                <!-- Calendar View -->
+                <div id="calendario-content" class="tab-content h-full flex items-center justify-center">
+                    <img src="calendar_ui_dark.png" alt="Julia Calendar Interface"
+                        class="rounded-xl shadow-sm w-full h-auto object-cover border border-white/10">
+                </div>
+
+                <!-- Dashboard View -->
+                <div id="dashboard-content" class="tab-content h-full flex items-center justify-center">
+                    <img src="dashboard_ui_dark.png" alt="Julia Dashboard Interface"
+                        class="rounded-xl shadow-sm w-full h-auto object-cover border border-white/10">
+                </div>
+
+                <!-- Kanban View -->
+                <div id="kanban-content" class="tab-content h-full flex items-center justify-center">
+                    <img src="kanban_ui_dark.png" alt="Julia Kanban Interface"
+                        class="rounded-xl shadow-sm w-full h-auto object-cover border border-white/10">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section id="funcionalidades" class="py-24 px-6 bg-darkbg">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 fade-in">
+                <p class="text-julia font-semibold mb-4">Porque Julia ? 🤔</p>
+                <h2 class="text-4xl md:text-5xl font-black mb-6 text-white">Funcionalidades que Impulsionam Resultados
+                </h2>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-cardbg p-6 rounded-2xl shadow-sm card-hover border border-white/5 fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-julia/10 flex items-center justify-center mb-4 text-julia">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold mb-2 text-white">Atendimento em Escala</h3>
+                    <p class="text-sm text-gray-400">Atenda centenas de leads simultaneamente, mantendo qualidade e
+                        personalização.</p>
+                </div>
+                <div class="bg-cardbg p-6 rounded-2xl shadow-sm card-hover border border-white/5 fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-julia/10 flex items-center justify-center mb-4 text-julia">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold mb-2 text-white">Qualificação Inteligente</h3>
+                    <p class="text-sm text-gray-400">Automatize a triagem e priorize leads com maior potencial de
+                        compra.</p>
+                </div>
+                <div class="bg-cardbg p-6 rounded-2xl shadow-sm card-hover border border-white/5 fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-julia/10 flex items-center justify-center mb-4 text-julia">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold mb-2 text-white">Agendamento Eficiente</h3>
+                    <p class="text-sm text-gray-400">Aumente as reuniões com leads qualificados e turbine suas vendas
+                    </p>
+                </div>
+                <div class="bg-cardbg p-6 rounded-2xl shadow-sm card-hover border border-white/5 fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-julia/10 flex items-center justify-center mb-4 text-julia">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold mb-2 text-white">Gestão de Follow-ups</h3>
+                    <p class="text-sm text-gray-400">Mensagens personalizadas e inteligentes para recuperar conversas
+                        inativas.</p>
+                </div>
+                <div class="bg-cardbg p-6 rounded-2xl shadow-sm card-hover border border-white/5 fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-julia/10 flex items-center justify-center mb-4 text-julia">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold mb-2 text-white">Dashboards Detalhadas</h3>
+                    <p class="text-sm text-gray-400">Otimize sua operação com base em dados, não em "achismos"</p>
+                </div>
+                <div class="bg-cardbg p-6 rounded-2xl shadow-sm card-hover border border-white/5 fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-julia/10 flex items-center justify-center mb-4 text-julia">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold mb-2 text-white">Segurança nas Respostas</h3>
+                    <p class="text-sm text-gray-400">TrustScore e validação dupla garantem respostas precisas.</p>
+                </div>
+                <div class="bg-cardbg p-6 rounded-2xl shadow-sm card-hover border border-white/5 fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-julia/10 flex items-center justify-center mb-4 text-julia">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold mb-2 text-white">Áudio Humanizado</h3>
+                    <p class="text-sm text-gray-400">Áudios personalizados com a voz da sua equipe, mantendo o toque
+                        humano.</p>
+                </div>
+                <div class="bg-cardbg p-6 rounded-2xl shadow-sm card-hover border border-white/5 fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-julia/10 flex items-center justify-center mb-4 text-julia">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold mb-2 text-white">Otimização Contínua</h3>
+                    <p class="text-sm text-gray-400">Respostas cada vez mais inteligentes e contextualizadas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-24 px-6 bg-darkbg">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-black mb-6 text-white">Empresas que já confiam na Julia</h2>
+                <p class="text-gray-400">Atendimentos realizados com alta performance.</p>
+                <div class="flex items-center justify-center gap-4 mt-6">
+                    <div class="text-center">
+                        <div class="text-3xl font-black">32M +</div>
+                        <div class="text-sm text-gray-600">Atendimentos</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-black">4.8</div>
+                        <div class="text-yellow-400">⭐⭐⭐⭐⭐</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div
+            class="bg-gradient-to-br from-cardbg to-slate-900 p-12 rounded-3xl shadow-xl border border-white/5 fade-in">
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div>
+                    <div class="text-5xl font-black mb-2 text-white">35.000</div>
+                    <p class="text-gray-400">leads atendidos</p>
+                </div>
+                <div>
+                    <div class="text-5xl font-black mb-2 text-white">- 85%</div>
+                    <p class="text-gray-400">tarefas manuais</p>
+                </div>
+                <div>
+                    <div class="text-5xl font-black mb-2 text-white">+ 370%</div>
+                    <p class="text-gray-400">Agendamentos qualificados</p>
+                </div>
+            </div>
+            <div class="text-center mt-8">
+                <p class="font-bold text-lg text-white">Grupo Montalvão</p>
+                <p class="text-gray-400">Filipe</p>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-24 px-6 bg-darkbg">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-6 fade-in text-white">Perguntas Frequentes</h2>
+            <p class="text-center text-gray-400 mb-12 fade-in">
+                Encontre respostas para as perguntas mais comuns sobre a Julia, incluindo funcionalidades, integração,
+                preço e mais.
+            </p>
+            <div class="space-y-4">
+                <div class="bg-cardbg rounded-2xl overflow-hidden shadow-sm border border-white/5 fade-in">
+                    <button
+                        class="faq-btn w-full p-6 text-left flex justify-between items-center font-bold hover:bg-white/5 transition text-white">
+                        <span>Como funciona a Julia?</span>
+                        <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 text-gray-400">
+                        A Julia é uma assistente virtual baseada em IA que atende seus leads via WhatsApp, qualifica
+                        automaticamente e agenda reuniões com sua equipe de vendas.
+                    </div>
+                </div>
+                <div class="bg-cardbg rounded-2xl overflow-hidden shadow-sm border border-white/5 fade-in">
+                    <button
+                        class="faq-btn w-full p-6 text-left flex justify-between items-center font-bold hover:bg-white/5 transition text-white">
+                        <span>Quanto custa para contratar a Julia?</span>
+                        <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 text-gray-400">
+                        Os planos variam de acordo com o volume de atendimentos e funcionalidades necessárias. Entre em
+                        contato para um orçamento personalizado.
+                    </div>
+                </div>
+                <div class="bg-cardbg rounded-2xl overflow-hidden shadow-sm border border-white/5 fade-in">
+                    <button
+                        class="faq-btn w-full p-6 text-left flex justify-between items-center font-bold hover:bg-white/5 transition text-white">
+                        <span>A Julia é segura?</span>
+                        <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 text-gray-400">
+                        Sim! Utilizamos criptografia de ponta a ponta e seguimos todas as normas da LGPD para proteger
+                        os dados dos seus clientes.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section class="py-24 px-6 bg-darkbg">
+        <div class="max-w-4xl mx-auto text-center fade-in">
+            <div class="bg-gradient-to-br from-julia to-juliadark p-12 rounded-3xl shadow-2xl">
+                <h2 class="text-4xl md:text-5xl font-black mb-6 text-white">Receba uma mensagem no WhatsApp</h2>
+                <p class="text-xl mb-8 text-blue-100">Curioso para ver o atendimento da Julia? Informe seu WhatsApp
+                    abaixo para conversar com ela.</p>
+                <form id="whatsappForm"
+                    class="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
+                    <input type="tel" id="phoneInput" placeholder="+55 (11) 99999-9999" required
+                        class="px-6 py-4 rounded-full border-2 border-white/20 bg-white/10 text-white placeholder-gray-300 outline-none focus:border-white transition w-full sm:flex-1 text-center font-semibold">
+                    <button type="submit"
+                        class="bg-white text-julia px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition w-full sm:w-auto">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-darkbg text-white py-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div>
+                    <div class="text-3xl font-black mb-4 text-julia">JULIA</div>
+                    <p class="text-gray-400 text-sm">O futuro chegou, e seu nome é JULIA</p>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4">Home</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-julia transition">Funcionalidades</a></li>
+                        <li><a href="#" class="hover:text-julia transition">Como funciona</a></li>
+                        <li><a href="#" class="hover:text-julia transition">Planos</a></li>
+                        <li><a href="#" class="hover:text-julia transition">Sobre nós</a></li>
+                        <li><a href="#" class="hover:text-julia transition">Contato</a></li>
+                        <li><a href="#" class="hover:text-julia transition">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4">Páginas</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-julia transition">JULIA SDR</a></li>
+                        <li><a href="#" class="hover:text-julia transition">Parceria</a></li>
+                        <li><a href="#" class="hover:text-julia transition">Blog</a></li>
+                        <li><a href="#" class="hover:text-julia transition">Política de privacidade</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4">Entre em nossa comunidade</h3>
+                    <div class="flex gap-3">
+                        <a href="https://chat.whatsapp.com/Jl5JLamOAEH0INHBAqkD5t" target="_blank"
+                            class="julia-btn px-6 py-3 rounded-full text-sm hover:scale-105 transition-transform">Discord</a>
+                        <a href="https://chat.whatsapp.com/Jl5JLamOAEH0INHBAqkD5t" target="_blank"
+                            class="julia-btn px-6 py-3 rounded-full text-sm hover:scale-105 transition-transform">WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8">
+                <p class="text-xs text-gray-500 mb-4">
+                    AVISO LEGAL: Os números de vendas apresentados são meus resultados pessoais. Entenda que esses
+                    resultados não são comuns, e não estou afirmando que você os alcançará. Uso esses números apenas
+                    como exemplos. Seus resultados podem variar e dependem de muitos fatores, como sua experiência,
+                    formação e dedicação. Todo negócio envolve riscos e exige esforço constante.
+                </p>
+                <p class="text-sm text-gray-400">© 2022 a 2026 JULIA Tech - Todos os direitos reservados</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const content = btn.nextElementSibling;
+                const icon = btn.querySelector('svg');
+                const isOpen = !content.classList.contains('hidden');
+
+                // Close all
+                document.querySelectorAll('.faq-content').forEach(c => c.classList.add('hidden'));
+                document.querySelectorAll('.faq-btn svg').forEach(i => i.style.transform = 'rotate(0deg)');
+
+                // Open clicked if was closed
+                if (!isOpen) {
+                    content.classList.remove('hidden');
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+
+        // WhatsApp Form Handler
+        document.getElementById('whatsappForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const phoneInput = document.getElementById('phoneInput');
+            let phone = phoneInput.value.replace(/\D/g, ''); // Remove non-digits
+
+            if (phone.length < 10) {
+                alert('Por favor, insira um número de telefone válido');
+                return;
+            }
+
+            // Add country code if not present
+            if (!phone.startsWith('55')) {
+                phone = '55' + phone;
+            }
+
+            const message = 'Olá Julia! Gostaria de receber mais informações sobre seus serviços.';
+            const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+
+            // Show success message
+            phoneInput.value = '';
+            alert('Redirecionando para o WhatsApp...');
+        });
+
+        // Phone number formatting
+        document.getElementById('phoneInput').addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+
+            if (value.length > 6) {
+                value = value.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+            } else if (value.length > 2) {
+                value = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+            } else if (value.length > 0) {
+                value = value.replace(/(\d{0,2})/, '($1');
+            }
+
+            e.target.value = value;
+        });
+
+        // Dropdown Menu Toggle
+        const maisBtn = document.getElementById('maisBtn');
+        const maisDropdown = document.getElementById('maisDropdown');
+        const maisIcon = document.getElementById('maisIcon');
+
+        maisBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = maisDropdown.classList.contains('show');
+
+            if (isOpen) {
+                maisDropdown.classList.remove('show');
+                maisIcon.style.transform = 'rotate(0deg)';
+            } else {
+                maisDropdown.classList.add('show');
+                maisIcon.style.transform = 'rotate(180deg)';
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!maisBtn.contains(e.target) && !maisDropdown.contains(e.target)) {
+                maisDropdown.classList.remove('show');
+                maisIcon.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // Close dropdown when clicking a link
+        maisDropdown.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                maisDropdown.classList.remove('show');
+                maisIcon.style.transform = 'rotate(0deg)';
+            });
+        });
+
+        // Platform Tabs Logic
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons and contents
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                // Add active class to clicked button
+                btn.classList.add('active');
+
+                // Show corresponding content
+                const tabId = btn.getAttribute('data-tab');
+                document.getElementById(`${tabId}-content`).classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>
