@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planos e Preços - Julia SDR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        julia: '#3b82f6',
+                        juliadark: '#1e40af',
+                        julialight: '#60a5fa',
+                        darkbg: '#020617',
+                        cardbg: '#0f172a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(180deg, #020617 0%, #172554 100%);
+        }
+    </style>
+</head>
+
+<body class="bg-darkbg text-white min-h-screen flex flex-col">
+    <!-- Navbar Simplified -->
+    <nav class="absolute top-6 left-0 w-full px-6 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html"
+                class="flex items-center gap-2 text-2xl font-black text-julia hover:opacity-80 transition">
+                <span>←</span> JULIA
+            </a>
+            <a href="login.html"
+                class="julia-btn bg-julia px-6 py-2 rounded-full font-bold hover:bg-blue-600 transition">Login</a>
+        </div>
+    </nav>
+
+    <!-- Pricing Content -->
+    <main class="flex-1 py-32 px-6 relative overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 gradient-bg -z-10"></div>
+        <div
+            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/5 rounded-full blur-3xl -z-10">
+        </div>
+
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h1 class="text-4xl md:text-6xl font-black mb-6 w-full">Escolha o plano ideal para sua escala</h1>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">Invista na eficiência da sua equipe comercial com a
+                    melhor IA SDR do mercado.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Starter -->
+                <div
+                    class="bg-cardbg border border-white/10 p-8 rounded-3xl hover:border-julia/50 transition duration-300">
+                    <h3 class="text-xl font-bold mb-2">Starter</h3>
+                    <div class="text-4xl font-black mb-6">R$ 497<span
+                            class="text-lg font-normal text-gray-400">/mês</span></div>
+                    <p class="text-gray-400 text-sm mb-8">Para times pequenos validarem o processo.</p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center gap-2 text-gray-300"><span class="text-green-400">✓</span> 500
+                            Leads/mês</li>
+                        <li class="flex items-center gap-2 text-gray-300"><span class="text-green-400">✓</span> 1
+                            Usuário</li>
+                        <li class="flex items-center gap-2 text-gray-300"><span class="text-green-400">✓</span>
+                            Integração WhatsApp</li>
+                    </ul>
+                    <a href="register.html"
+                        class="block w-full bg-white/5 hover:bg-white/10 text-center py-4 rounded-xl font-bold transition">Começar
+                        Grátis</a>
+                </div>
+
+                <!-- Pro (Popular) -->
+                <div
+                    class="bg-cardbg border-2 border-julia p-8 rounded-3xl relative transform md:-translate-y-4 shadow-2xl shadow-julia/20">
+                    <div
+                        class="absolute top-0 right-0 bg-julia text-white text-xs font-bold px-3 py-1 rounded-bl-xl rounded-tr-2xl">
+                        POPULAR</div>
+                    <h3 class="text-xl font-bold mb-2 text-julia">Pro</h3>
+                    <div class="text-4xl font-black mb-6">R$ 997<span
+                            class="text-lg font-normal text-gray-400">/mês</span></div>
+                    <p class="text-gray-400 text-sm mb-8">Para empresas em crescimento acelerado.</p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center gap-2 text-white"><span class="text-green-400">✓</span> 2.500
+                            Leads/mês</li>
+                        <li class="flex items-center gap-2 text-white"><span class="text-green-400">✓</span> 5 Usuários
+                        </li>
+                        <li class="flex items-center gap-2 text-white"><span class="text-green-400">✓</span> CRM
+                            Integrado</li>
+                        <li class="flex items-center gap-2 text-white"><span class="text-green-400">✓</span> Suporte
+                            Prioritário</li>
+                    </ul>
+                    <a href="register.html"
+                        class="block w-full bg-julia hover:bg-blue-600 text-white text-center py-4 rounded-xl font-bold transition shadow-lg">Começar
+                        Agora</a>
+                </div>
+
+                <!-- Enterprise -->
+                <div
+                    class="bg-cardbg border border-white/10 p-8 rounded-3xl hover:border-julia/50 transition duration-300">
+                    <h3 class="text-xl font-bold mb-2">Enterprise</h3>
+                    <div class="text-4xl font-black mb-6">Sob Consulta</div>
+                    <p class="text-gray-400 text-sm mb-8">Para grandes operações que precisam de escala.</p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center gap-2 text-gray-300"><span class="text-green-400">✓</span> Leads
+                            Ilimitados</li>
+                        <li class="flex items-center gap-2 text-gray-300"><span class="text-green-400">✓</span> Usuários
+                            Ilimitados</li>
+                        <li class="flex items-center gap-2 text-gray-300"><span class="text-green-400">✓</span> API
+                            Dedicada</li>
+                        <li class="flex items-center gap-2 text-gray-300"><span class="text-green-400">✓</span> Gerente
+                            de Conta</li>
+                    </ul>
+                    <a href="contact.html"
+                        class="block w-full bg-white/5 hover:bg-white/10 text-center py-4 rounded-xl font-bold transition">Falar
+                        com Consultor</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Simple Footer -->
+    <footer class="bg-darkbg text-white py-8 text-center border-t border-white/10">
+        <p class="text-gray-400 text-sm">© 2026 Julia Tech - Todos os direitos reservados</p>
+    </footer>
+</body>
+
+</html>

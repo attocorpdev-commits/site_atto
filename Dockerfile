@@ -9,9 +9,6 @@ RUN rm -rf ./*
 # Copy all files from current directory to the container
 COPY . .
 
-# Rename the main HTML file to index.html so Nginx serves it automatically
-RUN mv aivatech-copy.html index.html
-
 # Expose port 80
 EXPOSE 80
 

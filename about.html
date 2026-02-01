@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Nós - Julia SDR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        julia: '#3b82f6',
+                        juliadark: '#1e40af',
+                        julialight: '#60a5fa',
+                        darkbg: '#020617',
+                        cardbg: '#0f172a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(180deg, #020617 0%, #172554 100%);
+        }
+    </style>
+</head>
+
+<body class="bg-darkbg text-white min-h-screen">
+    <!-- Navbar Simplified -->
+    <nav class="absolute top-6 left-0 w-full px-6 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html"
+                class="flex items-center gap-2 text-2xl font-black text-julia hover:opacity-80 transition">
+                <span>←</span> JULIA
+            </a>
+            <a href="register.html"
+                class="julia-btn bg-julia px-6 py-2 rounded-full font-bold hover:bg-blue-600 transition">Criar
+                Assistente</a>
+        </div>
+    </nav>
+
+    <!-- Hero About -->
+    <header class="gradient-bg py-32 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl font-black mb-8 w-full">Nossa missão é democratizar a IA nas vendas</h1>
+            <p class="text-xl text-gray-400 leading-relaxed">
+                Nascemos com o propósito de eliminar o trabalho braçal e repetitivo dos times comerciais. Acreditamos
+                que humanos devem focar em conexões humanas, enquanto a Julia cuida de todo o resto.
+            </p>
+        </div>
+    </header>
+
+    <!-- Stats Grid -->
+    <section class="py-20 px-6 bg-cardbg/50">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-12 text-center">
+            <div>
+                <div class="text-5xl font-black text-julia mb-2">32M+</div>
+                <p class="text-gray-400">Leads Atendidos</p>
+            </div>
+            <div>
+                <div class="text-5xl font-black text-julia mb-2">24/7</div>
+                <p class="text-gray-400">Operação Disponível</p>
+            </div>
+            <div>
+                <div class="text-5xl font-black text-julia mb-2">100%</div>
+                <p class="text-gray-400">Foco em Performance</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="py-24 px-6 bg-darkbg">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12">
+            <div class="flex-1">
+                <h2 class="text-3xl font-black mb-6">A Era da IA Generativa</h2>
+                <p class="text-gray-400 mb-6 leading-relaxed">
+                    Antes da Julia, SDRs gastavam 70% do tempo qualificando leads frios e tentando agendar reuniões.
+                    Isso gerava burnout e baixa conversão.
+                </p>
+                <p class="text-gray-400 leading-relaxed">
+                    Desenvolvemos uma tecnologia proprietária capaz de entender contexto, intenção e objeções de compra
+                    em tempo real, via WhatsApp, transformando conversas em receita.
+                </p>
+            </div>
+            <div class="flex-1">
+                <div
+                    class="bg-gradient-to-br from-julia to-juliadark p-1 rounded-3xl rotate-3 transform hover:rotate-0 transition duration-500">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&fit=crop"
+                        class="rounded-2xl" alt="Team working">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-darkbg text-white py-16 px-6 border-t border-white/10">
+        <div class="max-w-7xl mx-auto text-center">
+            <h3 class="text-2xl font-black text-julia mb-8">Pronto para revolucionar seu comercial?</h3>
+            <a href="register.html"
+                class="inline-block bg-white text-julia px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition">Começar
+                Agora</a>
+        </div>
+    </footer>
+</body>
+
+</html>

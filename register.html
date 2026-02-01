@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Assistente - Julia SDR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        julia: '#3b82f6',
+                        juliadark: '#1e40af',
+                        julialight: '#60a5fa',
+                        darkbg: '#020617',
+                        cardbg: '#0f172a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(180deg, #020617 0%, #172554 100%);
+        }
+    </style>
+</head>
+
+<body class="bg-darkbg text-white min-h-screen flex flex-col">
+    <!-- Navbar Simplified -->
+    <nav class="absolute top-6 left-0 w-full px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html"
+                class="flex items-center gap-2 text-2xl font-black text-julia hover:opacity-80 transition">
+                <span>←</span> JULIA
+            </a>
+            <a href="login.html"
+                class="text-sm font-medium text-gray-300 hover:text-white transition hidden md:block">Já tem conta?
+                Entrar</a>
+        </div>
+    </nav>
+
+    <!-- Register Content -->
+    <main class="flex-1 flex items-center justify-center px-4 py-20 relative overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 gradient-bg -z-10"></div>
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl -z-10"></div>
+
+        <div
+            class="bg-cardbg border border-white/10 p-8 md:p-12 rounded-3xl shadow-2xl w-full max-w-lg backdrop-blur-sm relative mt-10">
+            <div class="text-center mb-8">
+                <span
+                    class="bg-julia/10 text-julia px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block">Comece
+                    agora</span>
+                <h1 class="text-3xl font-black mb-2 text-white">Crie sua Assistente</h1>
+                <p class="text-gray-400">Configure sua Julia em poucos passos e comece a vender mais.</p>
+            </div>
+
+            <form class="space-y-4" onsubmit="event.preventDefault(); alert('Cadastro simulado!');">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Nome</label>
+                        <input type="text" placeholder="Seu nome"
+                            class="w-full bg-darkbg border border-white/10 rounded-xl px-4 py-3 text-white focus:border-julia focus:ring-1 focus:ring-julia outline-none transition"
+                            required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Whatsapp</label>
+                        <input type="tel" placeholder="(11) 9..."
+                            class="w-full bg-darkbg border border-white/10 rounded-xl px-4 py-3 text-white focus:border-julia focus:ring-1 focus:ring-julia outline-none transition"
+                            required>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Nome da Empresa</label>
+                    <input type="text" placeholder="Minha Empresa Ltda"
+                        class="w-full bg-darkbg border border-white/10 rounded-xl px-4 py-3 text-white focus:border-julia focus:ring-1 focus:ring-julia outline-none transition"
+                        required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Email Corporativo</label>
+                    <input type="email" placeholder="voce@empresa.com"
+                        class="w-full bg-darkbg border border-white/10 rounded-xl px-4 py-3 text-white focus:border-julia focus:ring-1 focus:ring-julia outline-none transition"
+                        required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Senha</label>
+                    <input type="password" placeholder="Mínimo 8 caracteres"
+                        class="w-full bg-darkbg border border-white/10 rounded-xl px-4 py-3 text-white focus:border-julia focus:ring-1 focus:ring-julia outline-none transition"
+                        required>
+                </div>
+
+                <div class="flex items-start gap-3 mt-4">
+                    <input type="checkbox" id="terms"
+                        class="mt-1 rounded bg-darkbg border-white/10 text-julia focus:ring-julia" required>
+                    <label for="terms" class="text-xs text-gray-400">
+                        Eu concordo com os <a href="#" class="text-white hover:underline">Termos de Uso</a> e <a
+                            href="#" class="text-white hover:underline">Política de Privacidade</a>.
+                    </label>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-julia hover:bg-blue-600 text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-blue-500/25 mt-6">
+                    Criar Conta Grátis
+                </button>
+            </form>
+
+            <div class="mt-8 text-center md:hidden">
+                <p class="text-gray-400 text-sm">Já tem conta? <a href="login.html"
+                        class="text-julia font-bold hover:underline">Entrar</a></p>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
